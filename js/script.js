@@ -89,6 +89,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', showMyModalByScroll);
 
+    // DATA
 
+    const deadline = '2022-6-1'
 
+    function getTime(endTime){
+        const total = Date.parse(endTime) - Date.parse(new Date()),
+            days = Math.floor(total / (1000 * 60 * 60 * 24)),
+            hours = Math.floor(total / (1000 * 60 * 60) % 24),
+            minutes = Math.floor((total / 1000 * 60) % 60),
+            seconds = Math.floor((total / 1000) % 60);
+        return {
+            total: total,
+            days: days,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds
+        }
+    }
+
+    function zero(num){
+        if (num < 10){
+            return `0${num}`
+        }else {
+            return num
+        }
+    }
+
+    function setClock(selector, endTime){
+        const timer = document.querySelector(selector),
+            days = timer.querySelector('#days'),
+            hours = timer.querySelector('#hours'),
+            minutes = timer.querySelector('#minutes'),
+            seconds = timer.querySelector('#seconds'),
+            timeInterval = setInterval(updateClock, 1000);
+
+        function updateClock(){
+            const time = getTime(endTime)
+            days.innerHTML = zero(time.days)
+            hours.innerHTML = zero(time.hours)
+            minutes.innerHTML = zero(time.minutes)
+            seconds.innerHTML = zero(time.seconds)
+
+            if (time.total <= 0){
+                clearInterval(timeInterval)
+            }
+        }
+    }
+
+    setClock('.timer', deadline);
 })
